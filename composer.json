@@ -17,7 +17,6 @@
     "php": ">=7.1",
     "doctrine/orm": "^2.5",
     "kdyby/events": "^3.1",
-    "majkl578/nette-identity-doctrine": "^2.2",
     "nette/di": "^2.4",
     "nette/forms": "^2.4",
     "nette/security": "^2.4"
