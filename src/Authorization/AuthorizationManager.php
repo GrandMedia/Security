@@ -48,4 +48,12 @@ final class AuthorizationManager
 	{
 		$this->authorizators[] = $authorizator;
 	}
+
+	/**
+	 * @return IAuthorizator[]
+	 */
+	public function getAuthorizators(): array
+	{
+		return $this->authorizators;
+	}
 }

@@ -1,0 +1,5 @@
+php:
+    date.timezone: Europe/Prague
+
+extensions:
+    grand.security: GrandMedia\Security\DI\SecurityExtension
