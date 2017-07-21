@@ -23,21 +23,17 @@ final class AuthenticationManager
 	/** @var IUserStorage */
 	private $userStorage;
 
-	/** @var string */
-	private $staySignedInTime;
-
-	/** @var string */
-	private $doNotStaySignedInTime;
-
-	public function __construct(IUserStorage $userStorage, string $staySignedInTime, string $doNotStaySignedInTime)
+	public function __construct(IUserStorage $userStorage)
 	{
 		$this->userStorage = $userStorage;
-		$this->staySignedInTime = $staySignedInTime;
-		$this->doNotStaySignedInTime = $doNotStaySignedInTime;
 	}
 
-	public function login(IAuthenticator $authenticator, ICredentials $credentials, bool $staySignedIn): void
-	{
+	public function login(
+		IAuthenticator $authenticator,
+		ICredentials $credentials,
+		string $expirationTime,
+		bool $clearIdentityAfterExpiration
+	): void {
 		$this->logout(true);
 
 		$identity = $authenticator->authenticate($credentials);
@@ -46,12 +42,10 @@ final class AuthenticationManager
 			throw new AuthenticationException('', IAuthenticator::NOT_APPROVED);
 		}
 
-		if ($staySignedIn) {
-			$this->userStorage->setExpiration($this->staySignedInTime, false);
-		} else {
-			$this->userStorage->setExpiration($this->doNotStaySignedInTime, true);
-		}
-
+		$this->userStorage->setExpiration(
+			$expirationTime,
+			$clearIdentityAfterExpiration ? IUserStorage::CLEAR_IDENTITY : 0
+		);
 		$this->userStorage->setIdentity($identity);
 		$this->userStorage->setAuthenticated(true);
 		$this->onLoggedIn($identity);

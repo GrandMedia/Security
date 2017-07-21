@@ -19,7 +19,7 @@ final class AutomaticLogoutListenerTest extends TestCase
 		$identity = new Identity('foo', 'foo');
 		$userStorage->setAuthenticated(true);
 		$userStorage->setIdentity($identity);
-		$listener = new AutomaticLogoutListener(new AuthenticationManager($userStorage, '', ''));
+		$listener = new AutomaticLogoutListener(new AuthenticationManager($userStorage));
 
 		$identity->deactivate();
 		$listener->check();

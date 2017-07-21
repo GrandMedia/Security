@@ -20,7 +20,7 @@ final class AuthorizationManagerTest extends TestCase
 
 	public function testIsAllowed()
 	{
-		$manager = new AuthorizationManager(new AuthenticationManager(new UserStorage(), '', ''));
+		$manager = new AuthorizationManager(new AuthenticationManager(new UserStorage()));
 		$resourcesWithTrue = [
 			self::SUPPORTED_RESOURCE => [
 				self::SUPPORTED_PRIVILEGE => true,
