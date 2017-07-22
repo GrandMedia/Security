@@ -4,8 +4,8 @@ namespace GrandMediaTests\Security\Authentication\Mocks;
 
 use GrandMedia\Security\Authentication\IAuthenticator;
 use GrandMedia\Security\Authentication\ICredentials;
-use GrandMedia\Security\Authentication\Identity;
 use Nette\Security\AuthenticationException;
+use Nette\Security\IIdentity;
 
 final class Authenticator implements IAuthenticator
 {
@@ -17,7 +17,7 @@ final class Authenticator implements IAuthenticator
 		$this->identities = $identities;
 	}
 
-	public function authenticate(ICredentials $credentials): Identity
+	public function authenticate(ICredentials $credentials): IIdentity
 	{
 		if ($credentials instanceof Credentials) {
 			foreach ($this->identities as $identity) {

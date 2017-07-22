@@ -2,8 +2,8 @@
 
 namespace GrandMediaTests\Security\Authorization\Mocks;
 
-use GrandMedia\Security\Authentication\Identity;
 use GrandMedia\Security\Authorization\IAuthorizator;
+use Nette\Security\IIdentity;
 
 final class Authorizator implements IAuthorizator
 {
@@ -18,7 +18,7 @@ final class Authorizator implements IAuthorizator
 		$this->resources = $resources;
 	}
 
-	public function isAllowed(?Identity $identity, string $resource, string $privilege): bool
+	public function isAllowed(?IIdentity $identity, string $resource, string $privilege): bool
 	{
 		if (isset($this->resources[$resource])) {
 			if (isset($this->resources[$resource][$privilege])) {

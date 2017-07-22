@@ -16,12 +16,10 @@ require_once __DIR__ . '/../bootstrap.php';
 
 final class AuthenticationManagerTest extends TestCase
 {
-	const DEACTIVATED_USER_NAME = 'foo';
-	const DEACTIVATED_USER_PASSWORD = 'foo';
-	const ACTIVE_USER_NAME = 'bar';
-	const ACTIVE_USER_PASSWORD = 'bar';
-	const FAKE_USER_NAME = 'baz';
-	const FAKE_USER_PASSWORD = 'baz';
+	const USER_NAME = 'foo';
+	const USER_PASSWORD = 'foo';
+	const FAKE_USER_NAME = 'bar';
+	const FAKE_USER_PASSWORD = 'bar';
 
 	const STAY_SIGNED_IN_TIME = '14 days';
 	const DO_NOT_STAY_SIGNED_IN_TIME = '20 minutes';
@@ -35,12 +33,9 @@ final class AuthenticationManagerTest extends TestCase
 		$userStorage = new UserStorage();
 		$manager = $this->createManager($userStorage, $eventCounter);
 
-		$deactivatedIdentity = new Identity(self::DEACTIVATED_USER_NAME, self::DEACTIVATED_USER_PASSWORD);
-		$deactivatedIdentity->deactivate();
-		$activeIdentity = new Identity(self::ACTIVE_USER_NAME, self::ACTIVE_USER_PASSWORD);
+		$activeIdentity = new Identity(self::USER_NAME, self::USER_PASSWORD);
 		$authenticator = new Authenticator(
 			[
-				$deactivatedIdentity,
 				$activeIdentity,
 			]
 		);
@@ -66,7 +61,7 @@ final class AuthenticationManagerTest extends TestCase
 			function () use ($manager, $authenticator) {
 				$manager->login(
 					$authenticator,
-					new Credentials(self::ACTIVE_USER_NAME, self::FAKE_USER_PASSWORD),
+					new Credentials(self::USER_NAME, self::FAKE_USER_PASSWORD),
 					'',
 					false
 				);
@@ -76,20 +71,6 @@ final class AuthenticationManagerTest extends TestCase
 			IAuthenticator::INVALID_CREDENTIAL
 		);
 
-		Assert::exception(
-			function () use ($manager, $authenticator) {
-				$manager->login(
-					$authenticator,
-					new Credentials(self::DEACTIVATED_USER_NAME, self::DEACTIVATED_USER_PASSWORD),
-					'',
-					false
-				);
-			},
-			AuthenticationException::class,
-			'',
-			IAuthenticator::NOT_APPROVED
-		);
-
 		Assert::false($manager->isUserLoggedIn());
 		Assert::null($manager->getIdentity());
 		Assert::same(0, $eventCounter->login);
@@ -97,7 +78,7 @@ final class AuthenticationManagerTest extends TestCase
 
 		$manager->login(
 			$authenticator,
-			new Credentials(self::ACTIVE_USER_NAME, self::ACTIVE_USER_PASSWORD),
+			new Credentials(self::USER_NAME, self::USER_PASSWORD),
 			self::STAY_SIGNED_IN_TIME,
 			false
 		);
@@ -107,7 +88,12 @@ final class AuthenticationManagerTest extends TestCase
 		Assert::same($activeIdentity, $manager->getIdentity());
 		Assert::same(self::STAY_SIGNED_IN_TIME, $userStorage->getExpiration());
 
-		$manager->login($authenticator, new Credentials('bar', 'bar'), self::DO_NOT_STAY_SIGNED_IN_TIME, true);
+		$manager->login(
+			$authenticator,
+			new Credentials(self::USER_NAME, self::USER_PASSWORD),
+			self::DO_NOT_STAY_SIGNED_IN_TIME,
+			true
+		);
 		Assert::same(2, $eventCounter->login);
 		Assert::same(1, $eventCounter->logout);
 		Assert::true($manager->isUserLoggedIn());
@@ -124,7 +110,7 @@ final class AuthenticationManagerTest extends TestCase
 		$userStorage = new UserStorage();
 		$manager = $this->createManager($userStorage, $eventCounter);
 
-		$activeIdentity = new Identity(self::ACTIVE_USER_NAME, self::ACTIVE_USER_PASSWORD);
+		$activeIdentity = new Identity(self::USER_NAME, self::USER_PASSWORD);
 		$authenticator = new Authenticator(
 			[
 				$activeIdentity,
@@ -134,13 +120,13 @@ final class AuthenticationManagerTest extends TestCase
 		$manager->logout();
 		Assert::same(0, $eventCounter->logout);
 
-		$manager->login($authenticator, new Credentials(self::ACTIVE_USER_NAME, self::ACTIVE_USER_PASSWORD), '', false);
+		$manager->login($authenticator, new Credentials(self::USER_NAME, self::USER_PASSWORD), '', false);
 		$manager->logout();
 		Assert::false($manager->isUserLoggedIn());
 		Assert::same(1, $eventCounter->logout);
 		Assert::same($activeIdentity, $manager->getIdentity());
 
-		$manager->login($authenticator, new Credentials(self::ACTIVE_USER_NAME, self::ACTIVE_USER_PASSWORD), '', false);
+		$manager->login($authenticator, new Credentials(self::USER_NAME, self::USER_PASSWORD), '', false);
 		$manager->logout(true);
 		Assert::false($manager->isUserLoggedIn());
 		Assert::same(2, $eventCounter->logout);

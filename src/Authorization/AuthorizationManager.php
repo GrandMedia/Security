@@ -3,7 +3,7 @@
 namespace GrandMedia\Security\Authorization;
 
 use GrandMedia\Security\Authentication\AuthenticationManager;
-use GrandMedia\Security\Authentication\Identity;
+use Nette\Security\IIdentity;
 
 final class AuthorizationManager
 {
@@ -23,7 +23,7 @@ final class AuthorizationManager
 		return $this->isUserAllowed($this->authenticationManager->getIdentity(), $resource, $privilege);
 	}
 
-	public function isUserAllowed(?Identity $identity, string $resource, string $privilege): bool
+	public function isUserAllowed(?IIdentity $identity, string $resource, string $privilege): bool
 	{
 		$allowed = null;
 

@@ -2,13 +2,13 @@
 
 namespace GrandMedia\Security\Authentication;
 
-use Nette\Security\AuthenticationException;
+use Nette\Security\IIdentity;
 use Nette\Security\IUserStorage;
 use Nette\SmartObject;
 
 /**
- * @method onLoggedIn(Identity $identity)
- * @method onLoggedOut(?Identity $identity)
+ * @method onLoggedIn(IIdentity $identity)
+ * @method onLoggedOut(?IIdentity $identity)
  */
 final class AuthenticationManager
 {
@@ -37,10 +37,6 @@ final class AuthenticationManager
 		$this->logout(true);
 
 		$identity = $authenticator->authenticate($credentials);
-
-		if (!$identity->isActive()) {
-			throw new AuthenticationException('', IAuthenticator::NOT_APPROVED);
-		}
 
 		$this->userStorage->setExpiration(
 			$expirationTime,
@@ -73,10 +69,10 @@ final class AuthenticationManager
 		return $this->userStorage->isAuthenticated();
 	}
 
-	public function getIdentity(): ?Identity
+	public function getIdentity(): ?IIdentity
 	{
 		$identity = $this->userStorage->getIdentity();
-		return $identity instanceof Identity ? $identity : null;
+		return $identity instanceof IIdentity ? $identity : null;
 	}
 
 	public function getLogoutReason(): ?int

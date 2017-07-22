@@ -2,11 +2,11 @@
 
 namespace GrandMedia\Security\Authorization;
 
-use GrandMedia\Security\Authentication\Identity;
+use Nette\Security\IIdentity;
 
 interface IAuthorizator
 {
-	public function isAllowed(?Identity $identity, string $resource, string $privilege): bool;
+	public function isAllowed(?IIdentity $identity, string $resource, string $privilege): bool;
 
 	public function supportsResource(string $resource): bool;
 }

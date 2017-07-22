@@ -3,7 +3,6 @@
 namespace GrandMediaTests\Security\DI;
 
 use GrandMedia\Security\Authentication\AuthenticationManager;
-use GrandMedia\Security\Authentication\AutomaticLogoutListener;
 use GrandMedia\Security\Authorization\AuthorizationManager;
 use GrandMediaTests\Security\Authorization\Mocks\Authorizator;
 use Nette\Configurator;
@@ -21,9 +20,6 @@ final class SecurityExtensionTest extends TestCase
 
 		$authenticationManager = $container->getByType(AuthenticationManager::class);
 		Assert::true($authenticationManager instanceof AuthenticationManager);
-
-		$automaticLogoutListener = $container->getByType(AutomaticLogoutListener::class);
-		Assert::true($automaticLogoutListener instanceof AutomaticLogoutListener);
 
 		$authorizationManager = $container->getByType(AuthorizationManager::class);
 		Assert::true($authorizationManager instanceof AuthorizationManager);

@@ -2,18 +2,26 @@
 
 namespace GrandMediaTests\Security\Authentication\Mocks;
 
-final class Identity extends \GrandMedia\Security\Authentication\Identity
+use Nette\Security\IIdentity;
+
+final class Identity implements IIdentity
 {
 	/** @var string */
 	private $name;
 
-	public function __construct(string $name, string $password, string $role = '')
+	/** @var string */
+	private $password;
+
+	public function __construct(string $name, string $password)
 	{
 		$this->name = $name;
-
-		parent::__construct($password, $role);
+		$this->password = $password;
 	}
 
+	public function verify(string $password): bool
+	{
+		return $this->password === $password;
+	}
 
 	public function getId(): string
 	{
@@ -23,5 +31,12 @@ final class Identity extends \GrandMedia\Security\Authentication\Identity
 	public function getName(): string
 	{
 		return $this->name;
+	}
+
+	public function getRoles(): array
+	{
+		return [
+			$this->name,
+		];
 	}
 }
