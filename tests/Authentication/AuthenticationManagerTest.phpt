@@ -14,6 +14,9 @@ use Tester\TestCase;
 
 require_once __DIR__ . '/../bootstrap.php';
 
+/**
+ * @testCase
+ */
 final class AuthenticationManagerTest extends TestCase
 {
 	const USER_NAME = 'foo';

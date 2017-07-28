@@ -12,6 +12,9 @@ use Tester\TestCase;
 
 require_once __DIR__ . '/../bootstrap.php';
 
+/**
+ * @testCase
+ */
 final class AuthorizationManagerTest extends TestCase
 {
 	const SUPPORTED_RESOURCE = 'foo';
