@@ -3,19 +3,23 @@
 namespace GrandMediaTests\Security\Authentication\Mocks;
 
 use Nette\Security\IIdentity;
-use Nette\Security\IUserStorage;
 
-final class UserStorage implements IUserStorage
+final class UserStorage implements \Nette\Security\IUserStorage
 {
+
 	/** @var bool */
 	private $auth = false;
 
-	/** @var IIdentity|null */
+	/** @var \Nette\Security\IIdentity|null */
 	private $identity;
 
 	/** @var string */
 	private $expiration;
 
+	/**
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
+	 * @param bool $state
+	 */
 	public function setAuthenticated($state): void
 	{
 		$this->auth = $state;
@@ -31,7 +35,7 @@ final class UserStorage implements IUserStorage
 		return $this->identity;
 	}
 
-	public function setIdentity(IIdentity $identity = null): void
+	public function setIdentity(?IIdentity $identity = null): void
 	{
 		$this->identity = $identity;
 	}
@@ -41,6 +45,11 @@ final class UserStorage implements IUserStorage
 		return $this->expiration;
 	}
 
+	/**
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
+	 * @param string $time
+	 * @param int $flags
+	 */
 	public function setExpiration($time, $flags = 0): void
 	{
 		$this->expiration = $time;
@@ -50,4 +59,5 @@ final class UserStorage implements IUserStorage
 	{
 		return null;
 	}
+
 }

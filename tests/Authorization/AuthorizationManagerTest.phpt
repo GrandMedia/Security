@@ -8,20 +8,20 @@ use GrandMedia\Security\Authorization\ResourceNotFoundException;
 use GrandMediaTests\Security\Authentication\Mocks\UserStorage;
 use GrandMediaTests\Security\Authorization\Mocks\Authorizator;
 use Tester\Assert;
-use Tester\TestCase;
 
 require_once __DIR__ . '/../bootstrap.php';
 
 /**
  * @testCase
  */
-final class AuthorizationManagerTest extends TestCase
+final class AuthorizationManagerTest extends \Tester\TestCase
 {
-	const SUPPORTED_RESOURCE = 'foo';
-	const SUPPORTED_PRIVILEGE = 'bar';
-	const UNSUPPORTED_RESOURCE = 'baz';
 
-	public function testIsAllowed()
+	private const SUPPORTED_RESOURCE = 'foo';
+	private const SUPPORTED_PRIVILEGE = 'bar';
+	private const UNSUPPORTED_RESOURCE = 'baz';
+
+	public function testIsAllowed(): void
 	{
 		$manager = new AuthorizationManager(new AuthenticationManager(new UserStorage()));
 		$resourcesWithTrue = [
@@ -54,6 +54,7 @@ final class AuthorizationManagerTest extends TestCase
 		$manager->addAuthorizator(new Authorizator($resourcesWithFalse));
 		Assert::false($manager->isAllowed(self::SUPPORTED_RESOURCE, self::SUPPORTED_PRIVILEGE));
 	}
+
 }
 
 (new AuthorizationManagerTest())->run();

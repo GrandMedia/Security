@@ -7,10 +7,11 @@ use Nette\Security\IIdentity;
 
 final class AuthorizationManager
 {
-	/** @var AuthenticationManager */
+
+	/** @var \GrandMedia\Security\Authentication\AuthenticationManager */
 	private $authenticationManager;
 
-	/** @var IAuthorizator[] */
+	/** @var \GrandMedia\Security\Authorization\IAuthorizator[] */
 	private $authorizators = [];
 
 	public function __construct(AuthenticationManager $authenticationManager)
@@ -30,10 +31,10 @@ final class AuthorizationManager
 		foreach ($this->authorizators as $authorizator) {
 			if ($authorizator->supportsResource($resource)) {
 				$allowed = (is_bool($allowed) ? $allowed : true) && $authorizator->isAllowed(
-						$identity,
-						$resource,
-						$privilege
-					);
+					$identity,
+					$resource,
+					$privilege
+				);
 			}
 		}
 
@@ -44,16 +45,17 @@ final class AuthorizationManager
 		throw new ResourceNotFoundException($resource);
 	}
 
-	public function addAuthorizator(IAuthorizator $authorizator)
+	public function addAuthorizator(IAuthorizator $authorizator): void
 	{
 		$this->authorizators[] = $authorizator;
 	}
 
 	/**
-	 * @return IAuthorizator[]
+	 * @return \GrandMedia\Security\Authorization\IAuthorizator[]
 	 */
 	public function getAuthorizators(): array
 	{
 		return $this->authorizators;
 	}
+
 }

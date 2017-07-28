@@ -2,16 +2,16 @@
 
 namespace GrandMediaTests\Security\Authorization\Mocks;
 
-use GrandMedia\Security\Authorization\IAuthorizator;
 use Nette\Security\IIdentity;
 
-final class Authorizator implements IAuthorizator
+final class Authorizator implements \GrandMedia\Security\Authorization\IAuthorizator
 {
-	/** @var array */
+
+	/** @var bool[][] */
 	private $resources;
 
 	/**
-	 * @param array $resources
+	 * @param bool[][] $resources
 	 */
 	public function __construct(array $resources)
 	{
@@ -33,4 +33,5 @@ final class Authorizator implements IAuthorizator
 	{
 		return isset($this->resources[$resource]);
 	}
+
 }

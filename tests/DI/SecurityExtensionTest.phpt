@@ -8,16 +8,16 @@ use GrandMediaTests\Security\Authorization\Mocks\Authorizator;
 use Nette\Configurator;
 use Nette\DI\Container;
 use Tester\Assert;
-use Tester\TestCase;
 
 require_once __DIR__ . '/../bootstrap.php';
 
 /**
  * @testCase
  */
-final class SecurityExtensionTest extends TestCase
+final class SecurityExtensionTest extends \Tester\TestCase
 {
-	public function testFunctionality()
+
+	public function testFunctionality(): void
 	{
 		$container = $this->createContainer(null);
 
@@ -28,11 +28,11 @@ final class SecurityExtensionTest extends TestCase
 		Assert::true($authorizationManager instanceof AuthorizationManager);
 	}
 
-	public function testAddAuthorizator()
+	public function testAddAuthorizator(): void
 	{
 		$container = $this->createContainer('add-authorizator');
 
-		/** @var AuthorizationManager $authorizationManager */
+		/** @var \GrandMedia\Security\Authorization\AuthorizationManager $authorizationManager */
 		$authorizationManager = $container->getByType(AuthorizationManager::class);
 		foreach ($authorizationManager->getAuthorizators() as $authorizator) {
 			Assert::true($authorizator instanceof Authorizator);
@@ -46,11 +46,12 @@ final class SecurityExtensionTest extends TestCase
 		$config->setTempDirectory(TEMP_DIR);
 		$config->addConfig(__DIR__ . '/config/reset.neon');
 		if ($configFile !== null) {
-			$config->addConfig(__DIR__ . "/config/$configFile.neon");
+			$config->addConfig(__DIR__ . sprintf('/config/%s.neon', $configFile));
 		}
 
 		return $config->createContainer();
 	}
+
 }
 
 (new SecurityExtensionTest())->run();

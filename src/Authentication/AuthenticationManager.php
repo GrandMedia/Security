@@ -4,7 +4,6 @@ namespace GrandMedia\Security\Authentication;
 
 use Nette\Security\IIdentity;
 use Nette\Security\IUserStorage;
-use Nette\SmartObject;
 
 /**
  * @method onLoggedIn(IIdentity $identity)
@@ -12,7 +11,8 @@ use Nette\SmartObject;
  */
 final class AuthenticationManager
 {
-	use SmartObject;
+
+	use \Nette\SmartObject;
 
 	/** @var callable[] */
 	public $onLoggedIn;
@@ -20,7 +20,7 @@ final class AuthenticationManager
 	/** @var callable[] */
 	public $onLoggedOut;
 
-	/** @var IUserStorage */
+	/** @var \Nette\Security\IUserStorage */
 	private $userStorage;
 
 	public function __construct(IUserStorage $userStorage)
@@ -33,7 +33,8 @@ final class AuthenticationManager
 		ICredentials $credentials,
 		string $expirationTime,
 		bool $clearIdentityAfterExpiration
-	): void {
+	): void
+	{
 		$this->logout(true);
 
 		$identity = $authenticator->authenticate($credentials);
@@ -47,7 +48,7 @@ final class AuthenticationManager
 		$this->onLoggedIn($identity);
 	}
 
-	public function logout($clearIdentity = false): void
+	public function logout(bool $clearIdentity = false): void
 	{
 		if ($this->userStorage->isAuthenticated()) {
 			$this->onLoggedOut($this->getIdentity());
@@ -79,4 +80,5 @@ final class AuthenticationManager
 	{
 		return $this->userStorage->getLogoutReason();
 	}
+
 }

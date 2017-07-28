@@ -10,26 +10,26 @@ use GrandMediaTests\Security\Authentication\Mocks\Identity;
 use GrandMediaTests\Security\Authentication\Mocks\UserStorage;
 use Nette\Security\AuthenticationException;
 use Tester\Assert;
-use Tester\TestCase;
 
 require_once __DIR__ . '/../bootstrap.php';
 
 /**
  * @testCase
  */
-final class AuthenticationManagerTest extends TestCase
+final class AuthenticationManagerTest extends \Tester\TestCase
 {
-	const USER_NAME = 'foo';
-	const USER_PASSWORD = 'foo';
-	const FAKE_USER_NAME = 'bar';
-	const FAKE_USER_PASSWORD = 'bar';
 
-	const STAY_SIGNED_IN_TIME = '14 days';
-	const DO_NOT_STAY_SIGNED_IN_TIME = '20 minutes';
+	private const USER_NAME = 'foo';
+	private const USER_PASSWORD = 'foo';
+	private const FAKE_USER_NAME = 'bar';
+	private const FAKE_USER_PASSWORD = 'bar';
 
-	public function testLogin()
+	private const STAY_SIGNED_IN_TIME = '14 days';
+	private const DO_NOT_STAY_SIGNED_IN_TIME = '20 minutes';
+
+	public function testLogin(): void
 	{
-		$eventCounter = (object)[
+		$eventCounter = (object) [
 			'login' => 0,
 			'logout' => 0,
 		];
@@ -104,9 +104,9 @@ final class AuthenticationManagerTest extends TestCase
 		Assert::same(self::DO_NOT_STAY_SIGNED_IN_TIME, $userStorage->getExpiration());
 	}
 
-	public function testLogout()
+	public function testLogout(): void
 	{
-		$eventCounter = (object)[
+		$eventCounter = (object) [
 			'login' => 0,
 			'logout' => 0,
 		];
@@ -136,6 +136,10 @@ final class AuthenticationManagerTest extends TestCase
 		Assert::null($manager->getIdentity());
 	}
 
+	/**
+	 * @param \GrandMediaTests\Security\Authentication\Mocks\UserStorage $userStorage
+	 * @param object $eventCounter
+	 */
 	private function createManager(UserStorage $userStorage, $eventCounter): AuthenticationManager
 	{
 		$manager = new AuthenticationManager($userStorage);
@@ -149,6 +153,7 @@ final class AuthenticationManagerTest extends TestCase
 
 		return $manager;
 	}
+
 }
 
 (new AuthenticationManagerTest())->run();

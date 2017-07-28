@@ -2,16 +2,19 @@
 
 namespace GrandMediaTests\Security\Authentication\Mocks;
 
-use GrandMedia\Security\Authentication\IAuthenticator;
 use GrandMedia\Security\Authentication\ICredentials;
 use Nette\Security\AuthenticationException;
 use Nette\Security\IIdentity;
 
-final class Authenticator implements IAuthenticator
+final class Authenticator implements \GrandMedia\Security\Authentication\IAuthenticator
 {
-	/** @var Identity[] */
+
+	/** @var \GrandMediaTests\Security\Authentication\Mocks\Identity[] */
 	private $identities;
 
+	/**
+	 * @param \GrandMediaTests\Security\Authentication\Mocks\Identity[] $identities
+	 */
 	public function __construct(array $identities)
 	{
 		$this->identities = $identities;
@@ -33,4 +36,5 @@ final class Authenticator implements IAuthenticator
 
 		throw new AuthenticationException('', self::IDENTITY_NOT_FOUND);
 	}
+
 }

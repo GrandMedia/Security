@@ -2,10 +2,9 @@
 
 namespace GrandMediaTests\Security\Authentication\Mocks;
 
-use Nette\Security\IIdentity;
-
-final class Identity implements IIdentity
+final class Identity implements \Nette\Security\IIdentity
 {
+
 	/** @var string */
 	private $name;
 
@@ -39,4 +38,5 @@ final class Identity implements IIdentity
 			$this->name,
 		];
 	}
+
 }

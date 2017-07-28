@@ -14,6 +14,8 @@ matrix:
   include:
   - php: 7.1
     env: PHPSTAN=1
+  - php: 7.1
+    env: CODING_STANDARD=1
 
 install:
   - if [ "$PHPSTAN" = "1" ]; then composer require --dev --no-update phpstan/phpstan-shim:^0.7; fi
@@ -24,6 +26,7 @@ script:
   - vendor/bin/tester -s -p ${TESTER_RUNTIME:-php} tests
   - php /tmp/php-parallel-lint/parallel-lint.php -e php,phpt --exclude vendor .
   - if [ "$PHPSTAN" = "1" ]; then php vendor/phpstan/phpstan-shim/phpstan.phar analyse --ansi --no-progress -l7 -c phpstan.neon src tests; fi
+  - if [ "$CODING_STANDARD" = "1" ]; then php vendor/bin/phpcs --standard=ruleset.xml --encoding=utf-8 -sp src tests; fi
 
 after_failure:
   - 'for i in $(find ./tests -name \*.actual); do echo "--- $i"; cat $i; echo; echo; done'

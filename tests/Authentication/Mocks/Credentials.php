@@ -2,10 +2,9 @@
 
 namespace GrandMediaTests\Security\Authentication\Mocks;
 
-use GrandMedia\Security\Authentication\ICredentials;
-
-final class Credentials implements ICredentials
+final class Credentials implements \GrandMedia\Security\Authentication\ICredentials
 {
+
 	/** @var string */
 	private $name;
 
@@ -27,4 +26,5 @@ final class Credentials implements ICredentials
 	{
 		return $this->password;
 	}
+
 }

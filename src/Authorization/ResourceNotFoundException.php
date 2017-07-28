@@ -4,8 +4,10 @@ namespace GrandMedia\Security\Authorization;
 
 final class ResourceNotFoundException extends \InvalidArgumentException
 {
+
 	public function __construct(string $resource)
 	{
-		parent::__construct("Resource $resource not found.");
+		parent::__construct(sprintf('Resource %s not found.', $resource));
 	}
+
 }
