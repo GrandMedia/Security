@@ -7,11 +7,11 @@ use Nette\Security\IIdentity;
 final class Authorizator implements \GrandMedia\Security\Authorization\IAuthorizator
 {
 
-	/** @var bool[][] */
+	/** @var bool[][][] */
 	private $resources;
 
 	/**
-	 * @param bool[][] $resources
+	 * @param bool[][][] $resources
 	 */
 	public function __construct(array $resources)
 	{
@@ -20,10 +20,11 @@ final class Authorizator implements \GrandMedia\Security\Authorization\IAuthoriz
 
 	public function isAllowed(?IIdentity $identity, string $resource, string $privilege): bool
 	{
-		if (isset($this->resources[$resource])) {
-			if (isset($this->resources[$resource][$privilege])) {
-				return $this->resources[$resource][$privilege];
-			}
+		if ($identity && isset($this->resources[$identity->getId()]) &&
+			isset($this->resources[$identity->getId()][$resource]) &&
+			isset($this->resources[$identity->getId()][$resource][$privilege])
+		) {
+			return $this->resources[$identity->getId()][$resource][$privilege];
 		}
 
 		return false;
@@ -31,7 +32,17 @@ final class Authorizator implements \GrandMedia\Security\Authorization\IAuthoriz
 
 	public function supportsResource(string $resource): bool
 	{
-		return isset($this->resources[$resource]);
+		if (count($this->resources) === 0) {
+			return false;
+		}
+
+		$supports = true;
+
+		foreach ($this->resources as $identityResources) {
+			$supports = $supports && isset($identityResources[$resource]);
+		}
+
+		return $supports;
 	}
 
 }

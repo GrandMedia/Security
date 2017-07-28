@@ -4,7 +4,7 @@ namespace GrandMediaTests\Security\Authorization;
 
 use GrandMedia\Security\Authentication\AuthenticationManager;
 use GrandMedia\Security\Authorization\AuthorizationManager;
-use GrandMedia\Security\Authorization\ResourceNotFoundException;
+use GrandMediaTests\Security\Authentication\Mocks\Identity;
 use GrandMediaTests\Security\Authentication\Mocks\UserStorage;
 use GrandMediaTests\Security\Authorization\Mocks\Authorizator;
 use Tester\Assert;
@@ -18,41 +18,81 @@ final class AuthorizationManagerTest extends \Tester\TestCase
 {
 
 	private const SUPPORTED_RESOURCE = 'foo';
-	private const SUPPORTED_PRIVILEGE = 'bar';
 	private const UNSUPPORTED_RESOURCE = 'baz';
+	private const ALLOWED_PRIVILEGE = 'bar';
+	private const DENY_PRIVILEGE = 'baz';
+
+	private const IDENTITY_ID = '1';
 
 	public function testIsAllowed(): void
 	{
-		$manager = new AuthorizationManager(new AuthenticationManager(new UserStorage()));
-		$resourcesWithTrue = [
-			self::SUPPORTED_RESOURCE => [
-				self::SUPPORTED_PRIVILEGE => true,
+		$manager = $this->createManager();
+
+		Assert::true($manager->isAllowed(self::SUPPORTED_RESOURCE, self::ALLOWED_PRIVILEGE));
+		Assert::false($manager->isAllowed(self::SUPPORTED_RESOURCE, self::DENY_PRIVILEGE));
+	}
+
+	/**
+	 * @throws \GrandMedia\Security\Authorization\ResourceNotFoundException
+	 */
+	public function testIsAllowedUnsupportedResource(): void
+	{
+		$manager = $this->createManager();
+
+		$manager->isAllowed(self::UNSUPPORTED_RESOURCE, self::ALLOWED_PRIVILEGE);
+	}
+
+	public function testIsUserAllowed(): void
+	{
+		$identity = new Identity(self::IDENTITY_ID, '');
+		$manager = $this->createManager();
+
+		Assert::true($manager->isUserAllowed($identity, self::SUPPORTED_RESOURCE, self::ALLOWED_PRIVILEGE));
+		Assert::false($manager->isUserAllowed($identity, self::SUPPORTED_RESOURCE, self::DENY_PRIVILEGE));
+
+		Assert::false($manager->isUserAllowed(null, self::SUPPORTED_RESOURCE, self::ALLOWED_PRIVILEGE));
+
+		$resources = [
+			self::IDENTITY_ID => [
+				self::SUPPORTED_RESOURCE => [
+					self::ALLOWED_PRIVILEGE => false,
+					self::DENY_PRIVILEGE => false,
+				],
 			],
 		];
-		$resourcesWithFalse = [
-			self::SUPPORTED_RESOURCE => [
-				self::SUPPORTED_PRIVILEGE => false,
+		$manager->addAuthorizator(new Authorizator($resources));
+		Assert::false($manager->isUserAllowed($identity, self::SUPPORTED_RESOURCE, self::ALLOWED_PRIVILEGE));
+	}
+
+	/**
+	 * @throws \GrandMedia\Security\Authorization\ResourceNotFoundException
+	 */
+	public function testIsUserAllowedUnsupportedResource(): void
+	{
+		$manager = $this->createManager();
+
+		$manager->isUserAllowed(null, self::UNSUPPORTED_RESOURCE, self::ALLOWED_PRIVILEGE);
+	}
+
+	private function createManager(): AuthorizationManager
+	{
+		$identity = new Identity(self::IDENTITY_ID, '');
+		$userStorage = new UserStorage();
+		$userStorage->setAuthenticated(true);
+		$userStorage->setIdentity($identity);
+
+		$manager = new AuthorizationManager(new AuthenticationManager($userStorage));
+		$resources = [
+			self::IDENTITY_ID => [
+				self::SUPPORTED_RESOURCE => [
+					self::ALLOWED_PRIVILEGE => true,
+					self::DENY_PRIVILEGE => false,
+				],
 			],
 		];
+		$manager->addAuthorizator(new Authorizator($resources));
 
-		Assert::exception(
-			function () use ($manager) {
-				$manager->isAllowed(self::SUPPORTED_PRIVILEGE, self::SUPPORTED_PRIVILEGE);
-			},
-			ResourceNotFoundException::class
-		);
-
-		$manager->addAuthorizator(new Authorizator($resourcesWithTrue));
-		Assert::true($manager->isAllowed(self::SUPPORTED_RESOURCE, self::SUPPORTED_PRIVILEGE));
-		Assert::exception(
-			function () use ($manager) {
-				$manager->isAllowed(self::UNSUPPORTED_RESOURCE, self::SUPPORTED_PRIVILEGE);
-			},
-			ResourceNotFoundException::class
-		);
-
-		$manager->addAuthorizator(new Authorizator($resourcesWithFalse));
-		Assert::false($manager->isAllowed(self::SUPPORTED_RESOURCE, self::SUPPORTED_PRIVILEGE));
+		return $manager;
 	}
 
 }
