@@ -20,7 +20,7 @@ final class Authorizator implements \GrandMedia\Security\Authorization\IAuthoriz
 
 	public function isAllowed(?IIdentity $identity, string $resource, string $privilege): bool
 	{
-		if ($identity && isset($this->resources[$identity->getId()]) &&
+		if ($identity instanceof IIdentity && isset($this->resources[$identity->getId()]) &&
 			isset($this->resources[$identity->getId()][$resource]) &&
 			isset($this->resources[$identity->getId()][$resource][$privilege])
 		) {
