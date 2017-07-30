@@ -60,11 +60,6 @@ final class AuthenticationManager
 		}
 	}
 
-	public function getUserStorage(): IUserStorage
-	{
-		return $this->userStorage;
-	}
-
 	public function isUserLoggedIn(): bool
 	{
 		return $this->userStorage->isAuthenticated();
