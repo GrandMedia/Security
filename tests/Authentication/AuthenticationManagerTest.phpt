@@ -136,6 +136,14 @@ final class AuthenticationManagerTest extends \Tester\TestCase
 		Assert::null($manager->getIdentity());
 	}
 
+	public function testGetLogoutReason(): void
+	{
+		$userStorage = new UserStorage();
+		$manager = new AuthenticationManager($userStorage);
+
+		Assert::same($userStorage->getLogoutReason(), $manager->getLogoutReason());
+	}
+
 	/**
 	 * @param \GrandMediaTests\Security\Authentication\Mocks\UserStorage $userStorage
 	 * @param object $eventCounter
