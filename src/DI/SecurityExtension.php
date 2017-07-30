@@ -26,7 +26,7 @@ final class SecurityExtension extends \Nette\DI\CompilerExtension
 
 		$manager = $containerBuilder->getDefinition($this->prefix('authorizationManager'));
 		foreach ($containerBuilder->findByType(IAuthorizator::class) as $authorizator => $definition) {
-			$manager->addSetup('addAuthorizator', [sprintf('@%s', $authorizator)]);
+			$manager->addSetup('addAuthorizator', [\sprintf('@%s', $authorizator)]);
 		}
 	}
 

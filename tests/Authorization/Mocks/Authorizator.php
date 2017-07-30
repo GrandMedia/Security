@@ -32,7 +32,7 @@ final class Authorizator implements \GrandMedia\Security\Authorization\IAuthoriz
 
 	public function supportsResource(string $resource): bool
 	{
-		if (count($this->resources) === 0) {
+		if (\count($this->resources) === 0) {
 			return false;
 		}
 

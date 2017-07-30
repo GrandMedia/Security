@@ -46,7 +46,7 @@ final class SecurityExtensionTest extends \Tester\TestCase
 		$config->setTempDirectory(TEMP_DIR);
 		$config->addConfig(__DIR__ . '/config/reset.neon');
 		if ($configFile !== null) {
-			$config->addConfig(__DIR__ . sprintf('/config/%s.neon', $configFile));
+			$config->addConfig(__DIR__ . \sprintf('/config/%s.neon', $configFile));
 		}
 
 		return $config->createContainer();

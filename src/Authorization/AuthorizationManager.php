@@ -30,7 +30,7 @@ final class AuthorizationManager
 
 		foreach ($this->authorizators as $authorizator) {
 			if ($authorizator->supportsResource($resource)) {
-				$allowed = (is_bool($allowed) ? $allowed : true) && $authorizator->isAllowed(
+				$allowed = (\is_bool($allowed) ? $allowed : true) && $authorizator->isAllowed(
 					$identity,
 					$resource,
 					$privilege
@@ -38,7 +38,7 @@ final class AuthorizationManager
 			}
 		}
 
-		if (is_bool($allowed)) {
+		if (\is_bool($allowed)) {
 			return $allowed;
 		}
 
