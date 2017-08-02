@@ -2,7 +2,7 @@
 
 namespace GrandMediaTests\Security\Authentication\Mocks;
 
-final class Identity implements \Nette\Security\IIdentity
+final class IdentityMock implements \Nette\Security\IIdentity
 {
 
 	/** @var string */

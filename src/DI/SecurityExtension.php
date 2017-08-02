@@ -4,7 +4,7 @@ namespace GrandMedia\Security\DI;
 
 use GrandMedia\Security\Authentication\AuthenticationManager;
 use GrandMedia\Security\Authorization\AuthorizationManager;
-use GrandMedia\Security\Authorization\IAuthorizator;
+use GrandMedia\Security\Authorization\Authorizator;
 
 final class SecurityExtension extends \Nette\DI\CompilerExtension
 {
@@ -25,7 +25,7 @@ final class SecurityExtension extends \Nette\DI\CompilerExtension
 		$containerBuilder = $this->getContainerBuilder();
 
 		$manager = $containerBuilder->getDefinition($this->prefix('authorizationManager'));
-		foreach ($containerBuilder->findByType(IAuthorizator::class) as $authorizator => $definition) {
+		foreach ($containerBuilder->findByType(Authorizator::class) as $authorizator => $definition) {
 			$manager->addSetup('addAuthorizator', [\sprintf('@%s', $authorizator)]);
 		}
 	}

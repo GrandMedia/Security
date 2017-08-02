@@ -2,7 +2,7 @@
 
 namespace GrandMedia\Security\Authentication;
 
-interface ICredentials
+interface Credentials
 {
 
 }

@@ -1,2 +1,2 @@
 services:
-    - GrandMediaTests\Security\Authorization\Mocks\Authorizator([])
+    - GrandMediaTests\Security\Authorization\Mocks\AuthorizatorMock([])

@@ -29,8 +29,8 @@ final class AuthenticationManager
 	}
 
 	public function login(
-		IAuthenticator $authenticator,
-		ICredentials $credentials,
+		Authenticator $authenticator,
+		Credentials $credentials,
 		string $expirationTime,
 		bool $clearIdentityAfterExpiration
 	): void

@@ -3,11 +3,10 @@
 namespace GrandMediaTests\Security\Authentication;
 
 use GrandMedia\Security\Authentication\AuthenticationManager;
-use GrandMedia\Security\Authentication\IAuthenticator;
-use GrandMediaTests\Security\Authentication\Mocks\Authenticator;
-use GrandMediaTests\Security\Authentication\Mocks\Credentials;
-use GrandMediaTests\Security\Authentication\Mocks\Identity;
-use GrandMediaTests\Security\Authentication\Mocks\UserStorage;
+use GrandMediaTests\Security\Authentication\Mocks\AuthenticatorMock;
+use GrandMediaTests\Security\Authentication\Mocks\CredentialsMock;
+use GrandMediaTests\Security\Authentication\Mocks\IdentityMock;
+use GrandMediaTests\Security\Authentication\Mocks\UserStorageMock;
 use Nette\Security\AuthenticationException;
 use Tester\Assert;
 
@@ -33,11 +32,11 @@ final class AuthenticationManagerTest extends \Tester\TestCase
 			'login' => 0,
 			'logout' => 0,
 		];
-		$userStorage = new UserStorage();
+		$userStorage = new UserStorageMock();
 		$manager = $this->createManager($userStorage, $eventCounter);
 
-		$activeIdentity = new Identity(self::USER_NAME, self::USER_PASSWORD);
-		$authenticator = new Authenticator(
+		$activeIdentity = new IdentityMock(self::USER_NAME, self::USER_PASSWORD);
+		$authenticator = new AuthenticatorMock(
 			[
 				$activeIdentity,
 			]
@@ -50,28 +49,28 @@ final class AuthenticationManagerTest extends \Tester\TestCase
 			function () use ($manager, $authenticator) {
 				$manager->login(
 					$authenticator,
-					new Credentials(self::FAKE_USER_NAME, self::FAKE_USER_PASSWORD),
+					new CredentialsMock(self::FAKE_USER_NAME, self::FAKE_USER_PASSWORD),
 					'',
 					false
 				);
 			},
 			AuthenticationException::class,
 			'',
-			IAuthenticator::IDENTITY_NOT_FOUND
+			AuthenticatorMock::IDENTITY_NOT_FOUND
 		);
 
 		Assert::exception(
 			function () use ($manager, $authenticator) {
 				$manager->login(
 					$authenticator,
-					new Credentials(self::USER_NAME, self::FAKE_USER_PASSWORD),
+					new CredentialsMock(self::USER_NAME, self::FAKE_USER_PASSWORD),
 					'',
 					false
 				);
 			},
 			AuthenticationException::class,
 			'',
-			IAuthenticator::INVALID_CREDENTIAL
+			AuthenticatorMock::INVALID_CREDENTIAL
 		);
 
 		Assert::false($manager->isUserLoggedIn());
@@ -81,7 +80,7 @@ final class AuthenticationManagerTest extends \Tester\TestCase
 
 		$manager->login(
 			$authenticator,
-			new Credentials(self::USER_NAME, self::USER_PASSWORD),
+			new CredentialsMock(self::USER_NAME, self::USER_PASSWORD),
 			self::STAY_SIGNED_IN_TIME,
 			false
 		);
@@ -93,7 +92,7 @@ final class AuthenticationManagerTest extends \Tester\TestCase
 
 		$manager->login(
 			$authenticator,
-			new Credentials(self::USER_NAME, self::USER_PASSWORD),
+			new CredentialsMock(self::USER_NAME, self::USER_PASSWORD),
 			self::DO_NOT_STAY_SIGNED_IN_TIME,
 			true
 		);
@@ -110,11 +109,11 @@ final class AuthenticationManagerTest extends \Tester\TestCase
 			'login' => 0,
 			'logout' => 0,
 		];
-		$userStorage = new UserStorage();
+		$userStorage = new UserStorageMock();
 		$manager = $this->createManager($userStorage, $eventCounter);
 
-		$activeIdentity = new Identity(self::USER_NAME, self::USER_PASSWORD);
-		$authenticator = new Authenticator(
+		$activeIdentity = new IdentityMock(self::USER_NAME, self::USER_PASSWORD);
+		$authenticator = new AuthenticatorMock(
 			[
 				$activeIdentity,
 			]
@@ -123,13 +122,13 @@ final class AuthenticationManagerTest extends \Tester\TestCase
 		$manager->logout();
 		Assert::same(0, $eventCounter->logout);
 
-		$manager->login($authenticator, new Credentials(self::USER_NAME, self::USER_PASSWORD), '', false);
+		$manager->login($authenticator, new CredentialsMock(self::USER_NAME, self::USER_PASSWORD), '', false);
 		$manager->logout();
 		Assert::false($manager->isUserLoggedIn());
 		Assert::same(1, $eventCounter->logout);
 		Assert::same($activeIdentity, $manager->getIdentity());
 
-		$manager->login($authenticator, new Credentials(self::USER_NAME, self::USER_PASSWORD), '', false);
+		$manager->login($authenticator, new CredentialsMock(self::USER_NAME, self::USER_PASSWORD), '', false);
 		$manager->logout(true);
 		Assert::false($manager->isUserLoggedIn());
 		Assert::same(2, $eventCounter->logout);
@@ -138,17 +137,17 @@ final class AuthenticationManagerTest extends \Tester\TestCase
 
 	public function testGetLogoutReason(): void
 	{
-		$userStorage = new UserStorage();
+		$userStorage = new UserStorageMock();
 		$manager = new AuthenticationManager($userStorage);
 
 		Assert::same($userStorage->getLogoutReason(), $manager->getLogoutReason());
 	}
 
 	/**
-	 * @param \GrandMediaTests\Security\Authentication\Mocks\UserStorage $userStorage
+	 * @param \GrandMediaTests\Security\Authentication\Mocks\UserStorageMock $userStorage
 	 * @param object $eventCounter
 	 */
-	private function createManager(UserStorage $userStorage, $eventCounter): AuthenticationManager
+	private function createManager(UserStorageMock $userStorage, $eventCounter): AuthenticationManager
 	{
 		$manager = new AuthenticationManager($userStorage);
 

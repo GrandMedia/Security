@@ -4,7 +4,7 @@ namespace GrandMediaTests\Security\DI;
 
 use GrandMedia\Security\Authentication\AuthenticationManager;
 use GrandMedia\Security\Authorization\AuthorizationManager;
-use GrandMediaTests\Security\Authorization\Mocks\Authorizator;
+use GrandMediaTests\Security\Authorization\Mocks\AuthorizatorMock;
 use Nette\Configurator;
 use Nette\DI\Container;
 use Tester\Assert;
@@ -35,7 +35,7 @@ final class SecurityExtensionTest extends \Tester\TestCase
 		/** @var \GrandMedia\Security\Authorization\AuthorizationManager $authorizationManager */
 		$authorizationManager = $container->getByType(AuthorizationManager::class);
 		foreach ($authorizationManager->getAuthorizators() as $authorizator) {
-			Assert::true($authorizator instanceof Authorizator);
+			Assert::true($authorizator instanceof AuthorizatorMock);
 		}
 	}
 

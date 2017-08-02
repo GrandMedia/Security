@@ -2,7 +2,7 @@
 
 namespace GrandMediaTests\Security\Authentication\Mocks;
 
-final class Credentials implements \GrandMedia\Security\Authentication\ICredentials
+final class CredentialsMock implements \GrandMedia\Security\Authentication\Credentials
 {
 
 	/** @var string */

@@ -4,7 +4,7 @@ namespace GrandMedia\Security\Authorization;
 
 use Nette\Security\IIdentity;
 
-interface IAuthorizator
+interface Authorizator
 {
 
 	public function isAllowed(?IIdentity $identity, string $resource, string $privilege): bool;

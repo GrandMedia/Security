@@ -4,7 +4,7 @@ namespace GrandMediaTests\Security\Authorization\Mocks;
 
 use Nette\Security\IIdentity;
 
-final class Authorizator implements \GrandMedia\Security\Authorization\IAuthorizator
+final class AuthorizatorMock implements \GrandMedia\Security\Authorization\Authorizator
 {
 
 	/** @var bool[][][] */

@@ -11,7 +11,7 @@ final class AuthorizationManager
 	/** @var \GrandMedia\Security\Authentication\AuthenticationManager */
 	private $authenticationManager;
 
-	/** @var \GrandMedia\Security\Authorization\IAuthorizator[] */
+	/** @var \GrandMedia\Security\Authorization\Authorizator[] */
 	private $authorizators = [];
 
 	public function __construct(AuthenticationManager $authenticationManager)
@@ -45,13 +45,13 @@ final class AuthorizationManager
 		throw new ResourceNotFoundException($resource);
 	}
 
-	public function addAuthorizator(IAuthorizator $authorizator): void
+	public function addAuthorizator(Authorizator $authorizator): void
 	{
 		$this->authorizators[] = $authorizator;
 	}
 
 	/**
-	 * @return \GrandMedia\Security\Authorization\IAuthorizator[]
+	 * @return \GrandMedia\Security\Authorization\Authorizator[]
 	 */
 	public function getAuthorizators(): array
 	{

@@ -4,7 +4,7 @@ namespace GrandMediaTests\Security\Authentication\Mocks;
 
 use Nette\Security\IIdentity;
 
-final class UserStorage implements \Nette\Security\IUserStorage
+final class UserStorageMock implements \Nette\Security\IUserStorage
 {
 
 	/** @var bool */

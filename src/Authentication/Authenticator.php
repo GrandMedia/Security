@@ -4,7 +4,7 @@ namespace GrandMedia\Security\Authentication;
 
 use Nette\Security\IIdentity;
 
-interface IAuthenticator
+interface Authenticator
 {
 
 	public const IDENTITY_NOT_FOUND = 1;
@@ -12,6 +12,6 @@ interface IAuthenticator
 	public const FAILURE = 3;
 	public const NOT_APPROVED = 4;
 
-	public function authenticate(ICredentials $credentials): IIdentity;
+	public function authenticate(Credentials $credentials): IIdentity;
 
 }
