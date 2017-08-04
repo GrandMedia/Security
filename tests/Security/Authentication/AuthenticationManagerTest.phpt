@@ -10,7 +10,7 @@ use GrandMediaTests\Security\Authentication\Mocks\UserStorageMock;
 use Nette\Security\AuthenticationException;
 use Tester\Assert;
 
-require_once __DIR__ . '/../bootstrap.php';
+require_once __DIR__ . '/../../bootstrap.php';
 
 /**
  * @testCase

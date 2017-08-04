@@ -9,7 +9,7 @@ use GrandMediaTests\Security\Authentication\Mocks\UserStorageMock;
 use GrandMediaTests\Security\Authorization\Mocks\AuthorizatorMock;
 use Tester\Assert;
 
-require_once __DIR__ . '/../bootstrap.php';
+require_once __DIR__ . '/../../bootstrap.php';
 
 /**
  * @testCase

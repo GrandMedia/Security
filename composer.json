@@ -30,7 +30,7 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "GrandMediaTests\\Security\\": "tests/"
+      "GrandMediaTests\\": "tests/"
     }
   }
 }
