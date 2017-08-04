@@ -1,5 +1,5 @@
 php:
-    date.timezone: Europe/Prague
+	date.timezone: Europe/Prague
 
 extensions:
-    grand.security: GrandMedia\Security\DI\SecurityExtension
+	grand.security: GrandMedia\Security\DI\SecurityExtension
